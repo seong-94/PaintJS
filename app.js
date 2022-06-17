@@ -3,12 +3,16 @@ const ctx = canvas.getContext("2d"); // pixel coordinates
 const colors = document.getElementsByClassName("jsColors");
 const range = document.getElementById("jsRange");
 const mode = document.getElementById("jsMode");
+const saveBtn = document.getElementById("jsSave");
 
 const INITIAL_COLOR = "black";
+const CANVAS_SIZE = 700;
 
-canvas.width = 500;
-canvas.height = 500;
+canvas.width = CANVAS_SIZE;
+canvas.height = CANVAS_SIZE;
 
+ctx.fillStyle = "white";
+ctx.fillRect(0, 0, canvas.width, canvas.height);
 ctx.strokeStyle = "black"; // line color
 ctx.fillStyle = INITIAL_COLOR;
 ctx.lineWidth = 2.5; // line width
@@ -51,6 +55,9 @@ function handleCanvasClick() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   }
 }
+function handlCM(event) {
+  event.preventDefault();
+}
 
 if (canvas) {
   canvas.addEventListener("mousemove", onMouseMove); // offset X and Y is canvas position
@@ -58,6 +65,7 @@ if (canvas) {
   canvas.addEventListener("mouseup", stopPainting);
   canvas.addEventListener("mouseleave", stopPainting);
   canvas.addEventListener("click", handleCanvasClick);
+  canvas.addEventListener("contextmenu", handlCM);
 }
 
 Array.from(colors).forEach((color) =>
@@ -86,4 +94,16 @@ function handleModeChange(event) {
 
 if (mode) {
   mode.addEventListener("click", handleModeChange);
+}
+
+function handleSaveClick(event) {
+  const img = canvas.toDataURL();
+  const link = document.createElement("a");
+  link.href = img;
+  link.download = "PaintJS";
+  link.click();
+}
+
+if (saveBtn) {
+  saveBtn.addEventListener("click", handleSaveClick);
 }
